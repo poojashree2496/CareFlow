@@ -1,0 +1,13 @@
+Flask>=3.0,<4.0
+Flask-SQLAlchemy>=3.1,<4.0
+Flask-Migrate>=4.0,<5.0
+SQLAlchemy>=2.0,<2.2
+psycopg[binary]>=3.2,<4.0
+python-dotenv>=1.0,<2.0
+requests>=2.31,<3.0
+# Document ingestion / OCR. OCR additionally needs the Tesseract binary (see README).
+pypdfium2>=4.30
+pytesseract>=0.3.10
+Pillow>=10.0
+# Windows-friendly production WSGI server (Linux/macOS may use gunicorn instead)
+waitress>=3.0,<4.0

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="csrf-token" content="{{ csrf }}">
+<meta name="careflow-demo" content="{{ '1' if demo else '0' }}">
+<meta name="careflow-env" content="{{ env }}">
+<title>CareFlow</title>
+<link rel="stylesheet" href="/static/css/careflow.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div id="app" class="shell">
+  <header class="topbar">
+    <div class="brand"><span class="thread-mark small" aria-hidden="true"><span></span><span></span><span></span></span><strong>CareFlow</strong></div>
+    <nav id="workspace-tabs" class="tabs" aria-label="Workspaces"></nav>
+    <div class="top-actions">
+      <span id="env-badge" class="env-pill"></span>
+      <button id="btn-notify" class="icon-btn" aria-label="Notifications" title="Notifications">Alerts <span id="notify-count" class="count" hidden>0</span></button>
+      <span id="who" class="who"></span>
+      <button id="btn-logout" class="btn ghost">Sign out</button>
+    </div>
+  </header>
+  <div id="banner" class="banner" hidden></div>
+  <main id="main" tabindex="-1"><p class="muted pad">Loading…</p></main>
+  <aside id="drawer" class="drawer" hidden aria-live="polite"></aside>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<script type="module" src="/static/js/app.js"></script>
+</body>
+</html>

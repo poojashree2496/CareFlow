@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: careflow
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: waitress-serve --host=0.0.0.0 --port=$PORT app:app
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: CAREFLOW_ENV
+        value: production
+      - key: DB_BACKEND
+        value: postgres
+      - key: DB_POOL_SIZE
+        value: "3"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false

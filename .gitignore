@@ -1,0 +1,12 @@
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+hospital.db
+*.sqlite3
+.env
+.env.*
+!.env.example
+instance/
+uploads/

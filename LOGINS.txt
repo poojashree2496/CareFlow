@@ -1,0 +1,64 @@
+CareFlow sample logins
+Password for every account: CareFlow-Demo-2026!
+All e-mails end with @careflow.demo.example
+
+SUPER ADMIN      super, super2
+HOSPITAL ADMIN   admin, admin2, admin3
+DOCTORS          doctor1 (Dr. Asha Verma, Internal Medicine)
+                 doctor2 (Dr. Kenji Mori, Critical Care)
+                 doctor3 (Dr. Meera Iyer, Cardiology)
+                 doctor4 (Dr. Arjun Nair, Orthopaedics)
+                 doctor5 (Dr. Fatima Sheikh, Paediatrics)
+                 doctor6 (Dr. Rohan Das, General Surgery)
+                 doctor7 (Dr. Sunita Rao, Obstetrics and Gynaecology)
+                 doctor8 (Dr. Vikram Chandran, Neurology)
+                 doctor9 (Dr. Lakshmi Narayan, Pulmonology)
+                 doctor10 (Dr. Imran Qureshi, Nephrology)
+                 doctor11 (Dr. Anjali Deshmukh, Endocrinology)
+                 doctor12 (Dr. Suresh Pillai, Emergency Medicine)
+NURSES           nurse (Ward A), icunurse (ICU), nurse2, nurse3, nurse4, nurse5 ... nurse10
+LAB              lab, lab2, lab3, lab4
+PHARMACIST       pharmacist, pharmacist2, pharmacist3
+RADIOLOGY        radiology, radiology2, radiology3
+BILLING          billing, billing2, billing3, billing4
+
+PATIENTS
+patient1   Maya Rao
+patient2   Pooja Shree
+patient3   Ishita Sharma
+patient4   Keerthi Nair
+patient5   Tomas Ek
+patient6   Lina Okafor
+patient7   Ravi Menon
+patient8   Zoe Hart
+patient9   Janaki Iyer
+patient10  Riya Patel
+patient11  Sravani Reddy
+patient12  Nithya Menon
+patient13  Aarav Mehta
+patient14  Diya Kapoor
+patient15  Arjun Pillai
+patient16  Sneha Gupta
+patient17  Rahul Verma
+patient18  Ananya Das
+patient19  Vikram Singh
+patient20  Kavita Joshi
+patient21  Mohammed Rafiq
+patient22  Lakshmi Narayanan
+patient23  Suresh Babu
+patient24  Nisha Thomas
+patient25  Karthik Subramanian
+patient26  Fatima Noor
+patient27  Rohit Malhotra
+patient28  Priyanka Chopra
+patient29  Imran Khan
+patient30  Meenakshi Sundaram
+patient31  Gautham Raj
+patient32  Harini Venkat
+patient33  Anil Kumar
+patient34  Shreya Ghoshal
+
+Which commands create which logins:
+  seed-demo               super, admin, doctor1-2, nurse, icunurse, lab, pharmacist, radiology, billing, patient1
+  add-sample-patients     doctor3-7, nurse2-4, patient2-4
+  add-sample-staff        super2, admin2-3, doctor8-12, nurse5-10, lab2-4, pharmacist2-3, radiology2-3, billing2-4, patient5-34

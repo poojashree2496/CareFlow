@@ -1,0 +1,77 @@
+email,password,role,name
+super@careflow.demo.example,CareFlow-Demo-2026!,super_admin,Sam Root
+super2@careflow.demo.example,CareFlow-Demo-2026!,super_admin,Ritu Sharma
+admin@careflow.demo.example,CareFlow-Demo-2026!,hospital_admin,Hana Admin
+admin2@careflow.demo.example,CareFlow-Demo-2026!,hospital_admin,Karthik Raman
+admin3@careflow.demo.example,CareFlow-Demo-2026!,hospital_admin,Shalini Bose
+doctor1@careflow.demo.example,CareFlow-Demo-2026!,doctor,Dr. Asha Verma
+doctor2@careflow.demo.example,CareFlow-Demo-2026!,doctor,Dr. Kenji Mori
+doctor3@careflow.demo.example,CareFlow-Demo-2026!,doctor,Dr. Meera Iyer
+doctor4@careflow.demo.example,CareFlow-Demo-2026!,doctor,Dr. Arjun Nair
+doctor5@careflow.demo.example,CareFlow-Demo-2026!,doctor,Dr. Fatima Sheikh
+doctor6@careflow.demo.example,CareFlow-Demo-2026!,doctor,Dr. Rohan Das
+doctor7@careflow.demo.example,CareFlow-Demo-2026!,doctor,Dr. Sunita Rao
+doctor8@careflow.demo.example,CareFlow-Demo-2026!,doctor,Dr. Vikram Chandran
+doctor9@careflow.demo.example,CareFlow-Demo-2026!,doctor,Dr. Lakshmi Narayan
+doctor10@careflow.demo.example,CareFlow-Demo-2026!,doctor,Dr. Imran Qureshi
+doctor11@careflow.demo.example,CareFlow-Demo-2026!,doctor,Dr. Anjali Deshmukh
+doctor12@careflow.demo.example,CareFlow-Demo-2026!,doctor,Dr. Suresh Pillai
+nurse@careflow.demo.example,CareFlow-Demo-2026!,nurse,Nora Nurse
+nurse2@careflow.demo.example,CareFlow-Demo-2026!,nurse,Kavya Menon
+nurse3@careflow.demo.example,CareFlow-Demo-2026!,nurse,Anita Joseph
+nurse4@careflow.demo.example,CareFlow-Demo-2026!,nurse,Deepa Nambiar
+nurse5@careflow.demo.example,CareFlow-Demo-2026!,nurse,Pushpa Devi
+nurse6@careflow.demo.example,CareFlow-Demo-2026!,nurse,Merlin Thomas
+nurse7@careflow.demo.example,CareFlow-Demo-2026!,nurse,Sunitha Reddy
+nurse8@careflow.demo.example,CareFlow-Demo-2026!,nurse,Jyothi Lakshmi
+nurse9@careflow.demo.example,CareFlow-Demo-2026!,nurse,Rosy Mathew
+nurse10@careflow.demo.example,CareFlow-Demo-2026!,nurse,Bindu Nair
+icunurse@careflow.demo.example,CareFlow-Demo-2026!,nurse,Ivy ICU Nurse
+lab@careflow.demo.example,CareFlow-Demo-2026!,lab_staff,Leo Lab
+lab2@careflow.demo.example,CareFlow-Demo-2026!,lab_staff,Naveen Kumar
+lab3@careflow.demo.example,CareFlow-Demo-2026!,lab_staff,Rukmini Iyer
+lab4@careflow.demo.example,CareFlow-Demo-2026!,lab_staff,Farhan Sheikh
+pharmacist@careflow.demo.example,CareFlow-Demo-2026!,pharmacist,Priya Pharm
+pharmacist2@careflow.demo.example,CareFlow-Demo-2026!,pharmacist,Gayathri Menon
+pharmacist3@careflow.demo.example,CareFlow-Demo-2026!,pharmacist,Anwar Hussain
+radiology@careflow.demo.example,CareFlow-Demo-2026!,radiology_staff,Rae Radiology
+radiology2@careflow.demo.example,CareFlow-Demo-2026!,radiology_staff,Dilip Varma
+radiology3@careflow.demo.example,CareFlow-Demo-2026!,radiology_staff,Sheetal Kapoor
+billing@careflow.demo.example,CareFlow-Demo-2026!,billing_staff,Bill Billing
+billing2@careflow.demo.example,CareFlow-Demo-2026!,billing_staff,Meghna Ghosh
+billing3@careflow.demo.example,CareFlow-Demo-2026!,billing_staff,Harish Babu
+billing4@careflow.demo.example,CareFlow-Demo-2026!,billing_staff,Zeenat Ali
+patient1@careflow.demo.example,CareFlow-Demo-2026!,patient,Maya Rao
+patient2@careflow.demo.example,CareFlow-Demo-2026!,patient,Pooja Shree
+patient3@careflow.demo.example,CareFlow-Demo-2026!,patient,Ishita Sharma
+patient4@careflow.demo.example,CareFlow-Demo-2026!,patient,Keerthi Nair
+patient5@careflow.demo.example,CareFlow-Demo-2026!,patient,Tomas Ek
+patient6@careflow.demo.example,CareFlow-Demo-2026!,patient,Lina Okafor
+patient7@careflow.demo.example,CareFlow-Demo-2026!,patient,Ravi Menon
+patient8@careflow.demo.example,CareFlow-Demo-2026!,patient,Zoe Hart
+patient9@careflow.demo.example,CareFlow-Demo-2026!,patient,Janaki Iyer
+patient10@careflow.demo.example,CareFlow-Demo-2026!,patient,Riya Patel
+patient11@careflow.demo.example,CareFlow-Demo-2026!,patient,Sravani Reddy
+patient12@careflow.demo.example,CareFlow-Demo-2026!,patient,Nithya Menon
+patient13@careflow.demo.example,CareFlow-Demo-2026!,patient,Aarav Mehta
+patient14@careflow.demo.example,CareFlow-Demo-2026!,patient,Diya Kapoor
+patient15@careflow.demo.example,CareFlow-Demo-2026!,patient,Arjun Pillai
+patient16@careflow.demo.example,CareFlow-Demo-2026!,patient,Sneha Gupta
+patient17@careflow.demo.example,CareFlow-Demo-2026!,patient,Rahul Verma
+patient18@careflow.demo.example,CareFlow-Demo-2026!,patient,Ananya Das
+patient19@careflow.demo.example,CareFlow-Demo-2026!,patient,Vikram Singh
+patient20@careflow.demo.example,CareFlow-Demo-2026!,patient,Kavita Joshi
+patient21@careflow.demo.example,CareFlow-Demo-2026!,patient,Mohammed Rafiq
+patient22@careflow.demo.example,CareFlow-Demo-2026!,patient,Lakshmi Narayanan
+patient23@careflow.demo.example,CareFlow-Demo-2026!,patient,Suresh Babu
+patient24@careflow.demo.example,CareFlow-Demo-2026!,patient,Nisha Thomas
+patient25@careflow.demo.example,CareFlow-Demo-2026!,patient,Karthik Subramanian
+patient26@careflow.demo.example,CareFlow-Demo-2026!,patient,Fatima Noor
+patient27@careflow.demo.example,CareFlow-Demo-2026!,patient,Rohit Malhotra
+patient28@careflow.demo.example,CareFlow-Demo-2026!,patient,Priyanka Chopra
+patient29@careflow.demo.example,CareFlow-Demo-2026!,patient,Imran Khan
+patient30@careflow.demo.example,CareFlow-Demo-2026!,patient,Meenakshi Sundaram
+patient31@careflow.demo.example,CareFlow-Demo-2026!,patient,Gautham Raj
+patient32@careflow.demo.example,CareFlow-Demo-2026!,patient,Harini Venkat
+patient33@careflow.demo.example,CareFlow-Demo-2026!,patient,Anil Kumar
+patient34@careflow.demo.example,CareFlow-Demo-2026!,patient,Shreya Ghoshal

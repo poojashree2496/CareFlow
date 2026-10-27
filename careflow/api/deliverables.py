@@ -50,19 +50,6 @@ def create_deliverable(pid):
     return ok("Item recorded", id=row.id)
 
 
-@bp.get("/deliverables/<int:did>/print")
-@require_perm("deliverable.manage")
-def print_deliverable(did):
-    """Printable copy with verification QR for staff to hand over (released items only)."""
-    from .portal import render_copy
-    from ..models import Patient
-    row = db.session.get(Deliverable, did)
-    if not row:
-        raise ApiError("Item not found", 404)
-    get_authorized_patient(row.patient_id, "identity")
-    return render_copy(row, db.session.get(Patient, row.patient_id))
-
-
 @bp.patch("/deliverables/<int:did>")
 @require_perm("deliverable.manage")
 def update_deliverable(did):

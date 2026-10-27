@@ -1,4 +1,4 @@
--- CareFlow database schema.
+-- CareFlow database schema (sqlite).
 -- Generated from the application models (careflow/models.py). The migrations in migrations/versions create exactly this schema.
 -- 48 tables.
 

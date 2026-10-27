@@ -216,17 +216,6 @@ def audit_log():
                                                                          "role": r.user_role, "patient_id": r.patient_id, "entity": f"{r.entity_type}:{r.entity_id}" if r.entity_type else "", "details": r.details, "ip": r.ip} for r in rows])
 
 
-@bp.get("/audit/verify")
-@require_perm("audit.view")
-def audit_verify():
-    """Re-compute the whole audit hash chain and report where (if anywhere) it no longer holds."""
-    from .. import audit_chain
-    res = audit_chain.verify()
-    audit("audit.chain_verified", category="access", details=f"ok={res['ok']} checked={res['checked']} issues={res['issue_count']}")
-    commit()
-    return jsonify(ok=True, **{("chain_ok" if k == "ok" else k): v for k, v in res.items()})
-
-
 @bp.get("/security")
 @require_perm("security.view")
 def security():

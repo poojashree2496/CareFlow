@@ -31,5 +31,4 @@ def row(d: Deliverable) -> dict:
     from ..utils import iso
     return {"id": d.id, "patient_id": d.patient_id, "kind": d.kind, "title": d.title, "ref_type": d.ref_type, "ref_id": d.ref_id, "document_id": d.document_id,
             "digital_available": bool(d.digital_available), "physical_status": d.physical_status, "physical_note": d.physical_note, "received_by_name": d.received_by_name,
-            "handed_over_at": iso(d.handed_over_at), "handed_over_by": d.handed_over_by.name if d.handed_over_by else "", "created_at": iso(d.created_at),
-            "print_url": f"/api/deliverables/{d.id}/print" if d.ref_type in ("lab", "radiology", "bill") else ""}
+            "handed_over_at": iso(d.handed_over_at), "handed_over_by": d.handed_over_by.name if d.handed_over_by else "", "created_at": iso(d.created_at)}

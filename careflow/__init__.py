@@ -40,7 +40,6 @@ def create_app(config_overrides: dict | None = None) -> Flask:
     migrate.init_app(app, db, directory=str(BASE_DIR / "migrations"), compare_type=True, render_as_batch=True)
 
     from . import models  # noqa: F401  (register tables)
-    from . import audit_chain  # noqa: F401  (hash-chains audit rows as they are written)
     from .security import init_security
     init_security(app)
 

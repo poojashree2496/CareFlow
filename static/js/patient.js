@@ -128,9 +128,8 @@ function handover(id) {
     }) }, d.statuses.map((s) => h("option", { value: s, selected: s === r.physical_status }, s)));
     clear(box).append(card("Digital & physical copies given to the patient", h("div", null,
       table([{ label: "Item", key: "title" }, { label: "Kind", key: "kind" }, { label: "Digital", render: (r) => r.digital_available ? chip("available", "ok") : "—" },
-        { label: "Print with QR", render: (r) => r.print_url ? h("a", { class: "btn sm", href: r.print_url, target: "_blank", rel: "noopener" }, "Print") : "—" },
         { label: "Printed copy", render: (r) => r.physical_status === "Handed over" ? h("span", null, chip("Handed over", "ok"), " ", h("span", { class: "small muted" }, `${r.received_by_name || ""} · ${fmt(r.handed_over_at)}`)) : status(r) }], d.items, "Nothing tracked yet. Released reports appear here automatically."),
-      h("p", { class: "muted small" }, "Use “Print” to open a copy with a QR code that anyone can scan to confirm it is genuine, then record here when it is ready or collected."))));
+      h("p", { class: "muted small" }, "This tracks whether a printed copy is requested, prepared, ready or collected. It does not print anything."))));
   };
   load();
   return box;

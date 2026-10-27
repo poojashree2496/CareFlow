@@ -103,23 +103,6 @@ def register_cli(app):
         for role, email, name in res["accounts"]:
             click.echo(f"  {role:15} {email:45} {name}")
 
-    @app.cli.command("verify-audit")
-    def verify_audit():
-        """Check that the audit trail has not been edited or had entries removed."""
-        from . import audit_chain
-        res = audit_chain.verify()
-        click.echo(f"Entries checked: {res['checked']}   (first id {res['first_id']}, last id {res['last_id']})")
-        click.echo(f"Head hash: {res['head_hash']}")
-        if res["unprotected_before_chain"]:
-            click.echo(f"Entries older than the chain (no hash): {res['unprotected_before_chain']}")
-        if res["ok"]:
-            click.echo("OK: the audit trail is intact.")
-            return
-        click.echo(f"PROBLEM: {res['issue_count']} issue(s) found")
-        for i in res["issues"]:
-            click.echo(f"  id {i['id']}: {i['problem']}")
-        raise SystemExit(1)
-
     @app.cli.command("reset-demo-passwords")
     def reset_demo_passwords():
         """Set every demonstration account's password to the current DEMO_PASSWORD (demo mode only)."""

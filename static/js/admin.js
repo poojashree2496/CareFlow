@@ -5,11 +5,11 @@ import { del } from "./api.js";
 
 export async function renderAdmin(setMain) {
   const root = h("div", { class: "grid" }, h("h2", null, "Users & audit"));
-  const usersBox = h("div"), auditBox = h("div");
+  const usersBox = h("div"), auditBox = h("div"), verifyBox = h("div");
   const pick = h("select", { "aria-label": "Patient" });
   const portalBox = h("div", { class: "row" }, pick, h("button", { class: "btn primary", onclick: () => { const o = pick.selectedOptions[0]; if (o && o.value) createPatientLogin(JSON.parse(o.dataset.p), loadUsers); } }, "Create portal login"));
   get("/api/patients?per_page=100").then((d) => pick.append(h("option", { value: "" }, "Choose a patient…"), ...d.items.map((p) => h("option", { value: p.id, "data-p": JSON.stringify({ id: p.id, name: p.name, email: p.email || "" }) }, `${p.name} · ${p.patient_code}`)))).catch(() => {});
-  root.append(card("Patient portal logins", h("div", null, h("p", { class: "muted small" }, "Give a patient a read-only dashboard for their own records, reports and the assistant."), portalBox)), card("Users", usersBox, h("button", { class: "btn primary sm", onclick: () => addUser(loadUsers) }, "+ Add account")), card("Audit trail", auditBox));
+  root.append(card("Patient portal logins", h("div", null, h("p", { class: "muted small" }, "Give a patient a read-only dashboard for their own records, reports and the assistant."), portalBox)), card("Users", usersBox, h("button", { class: "btn primary sm", onclick: () => addUser(loadUsers) }, "+ Add account")), card("Audit trail", auditBox, h("div", { class: "row", style: "margin-top:.6rem" }, h("button", { class: "btn sm", onclick: () => guarded(verifyChain) }, "Verify integrity")), verifyBox));
   setMain(root);
 
   async function loadUsers() {
@@ -32,6 +32,16 @@ export async function renderAdmin(setMain) {
       { label: "When", render: (r) => fmt(r.at) }, { label: "User", render: (r) => r.user || "—" }, { label: "Action", key: "action" },
       { label: "Outcome", render: (r) => chip(r.outcome, r.outcome === "success" ? "ok" : "crit") }, { label: "IP", key: "ip" },
     ], d.items, "No audit entries."));
+  }
+  async function verifyChain() {
+    verifyBox.replaceChildren(h("p", { class: "muted small" }, "Checking every entry…"));
+    const d = await get("/api/admin/audit/verify");
+    const head = h("p", { class: "muted small" }, `Entries checked: ${d.checked}. Latest entry hash (note it down to detect later removal of recent entries): `, h("code", null, d.head_hash.slice(0, 16) + "…"));
+    verifyBox.replaceChildren(
+      h("p", null, d.chain_ok ? chip("Audit trail intact", "ok") : chip(`${d.issue_count} problem(s) found`, "crit")),
+      head,
+      d.chain_ok ? null : table([{ label: "Entry id", key: "id" }, { label: "Problem", key: "problem" }], d.issues, ""),
+      d.unprotected_before_chain ? h("p", { class: "muted small" }, `${d.unprotected_before_chain} older entries pre-date the hash chain.`) : null);
   }
   await Promise.all([loadUsers(), loadAudit()]);
 }

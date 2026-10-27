@@ -8,5 +8,8 @@ hospital.db
 .env
 .env.*
 !.env.example
+LOGINS.txt
+careflow_logins.csv
+database/supabase/2_data_part*.sql
 instance/
 uploads/

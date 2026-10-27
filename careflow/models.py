@@ -1021,5 +1021,8 @@ class AuditLog(db.Model):
     outcome = db.Column(db.String(10), default="success")
     ip = db.Column(db.String(64), default="")
     request_id = db.Column(db.String(36), default="")
+    # --- tamper evidence: each row stores the previous row's hash and its own (see careflow/audit_chain.py) ---
+    prev_hash = db.Column(db.String(64))
+    entry_hash = db.Column(db.String(64))
     __table_args__ = (Index("ix_audit_log_created", "created_at"), Index("ix_audit_log_patient", "patient_id"))
 

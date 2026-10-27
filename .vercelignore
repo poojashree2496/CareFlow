@@ -1,0 +1,14 @@
+.env
+.env.*
+.venv/
+venv/
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+hospital.db
+*.sqlite3
+careflow_logins.csv
+LOGINS.txt
+database/supabase/2_data_part*.sql
+instance/
+uploads/

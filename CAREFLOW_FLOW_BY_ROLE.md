@@ -439,7 +439,7 @@ Audit `portal.viewed`. The page is explicitly labelled read-only.
 ## 5. Cross-role end-to-end journeys
 
 ### 5.1 Outpatient visit
-1. **Admin/doctor/nurse** `POST /patients` registers (duplicate guard, code `P-...`). 
+1. **Admin/doctor/nurse** `POST /patients` registers (duplicate guard, code `P-...`).
 2. **Scheduler** `POST /appointments` (slot validation + unique index).
 3. **Nurse/scheduler** check-in: status `Checked-in`.
 4. **Doctor** `start` -> Encounter created; gains access via appointment relationship; writes a Progress note; orders a lab; prescribes.

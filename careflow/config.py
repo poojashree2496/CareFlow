@@ -305,6 +305,7 @@ def build_config(overrides: dict | None = None) -> dict:
         "STORAGE_BACKEND": (os.environ.get("STORAGE_BACKEND") or "local").lower(),
         "UPLOAD_DIR": os.environ.get("UPLOAD_DIR") or str(BASE_DIR / "instance" / "private_uploads"),
         "UPLOAD_MAX_PDF_PAGES": env_int("UPLOAD_MAX_PDF_PAGES", 60),
+        "PUBLIC_BASE_URL": os.environ.get("PUBLIC_BASE_URL", "").strip().rstrip("/"),  # e.g. https://care-flow-two-livid.vercel.app (printed in QR codes)
         "SUPABASE_URL": os.environ.get("SUPABASE_URL", "").rstrip("/"),
         "SUPABASE_SERVICE_ROLE_KEY": os.environ.get("SUPABASE_SERVICE_ROLE_KEY", ""),  # server-side only
         "SUPABASE_BUCKET": os.environ.get("SUPABASE_BUCKET", "patient-documents"),

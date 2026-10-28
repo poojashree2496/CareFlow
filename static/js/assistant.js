@@ -5,7 +5,7 @@ import { h, chip, guarded } from "./ui.js";
 export function mountAssistant(patientId, patient) {
   const root = h("div");
   const chat = h("div", { class: "chat", "aria-live": "polite" });
-  const status = h("p", { class: "muted small" }, "Checking assistant status…");
+  const status = h("p", { class: "muted small", hidden: true }, "Checking assistant status…");
   const mode = h("select", { "aria-label": "Answer style" }, h("option", { value: "simple" }, "Plain language"), h("option", { value: "clinical" }, "Clinical"));
   const q = h("textarea", { rows: 2, placeholder: `Ask about ${patient.name.split(" (")[0]}'s record…`, maxlength: 1500 });
   const send = h("button", { class: "btn primary", type: "button" }, "Ask");
@@ -21,12 +21,15 @@ export function mountAssistant(patientId, patient) {
   };
 
   get("/api/ai/status").then((s) => {
+    if (!s.configured) return;
+    status.hidden = false;
     status.textContent = "";
-    status.append(s.configured
-      ? chip(`${s.provider}${s.external ? " · external" : " · local"}`, "ok")
-      : chip("configuration required", "warn"), " ",
-    s.configured ? (s.image_analysis ? "" : "Answers use report text only; images are not analysed.") : (s.message || ""));
-  }).catch(() => { status.textContent = "Assistant status unavailable."; });
+    status.append(chip(`${s.provider}${s.external ? " · external" : " · local"}`, "ok"), " ",
+      s.image_analysis ? "" : "Answers use report text only; images are not analysed.");
+  }).catch(() => {
+    status.hidden = false;
+    status.textContent = "Assistant status unavailable.";
+  });
 
   send.addEventListener("click", () => guarded(async () => {
     const question = q.value.trim();

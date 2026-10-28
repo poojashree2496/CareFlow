@@ -231,7 +231,7 @@ def test_patient_assistant_never_reads_unshared_documents(as_user, ids, mock_ai)
     p = as_user("patient1")
     cid = p.post("/api/ai/conversations", {"patient_id": ids.patient["Maya Rao"]}).json["conversation_id"]
     p.post(f"/api/ai/conversations/{cid}/ask", {"question": "What does my uploaded document letter say?"})
-    assert "SECRETWORD-77" not in "\n".join(m["content"] for m in MockProvider.calls[-1]["messages"])
+    assert "SECRETWORD-77" not in "\n".join(m["content"] for m in (MockProvider.calls[-1]["messages"] if MockProvider.calls else []))
     d1.post(f"/api/documents/{up.json['document']['id']}/visibility", {"patient_visible": True})
     p.post(f"/api/ai/conversations/{cid}/ask", {"question": "What does my uploaded document letter say?"})
     assert "SECRETWORD-77" in "\n".join(m["content"] for m in MockProvider.calls[-1]["messages"])

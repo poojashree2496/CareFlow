@@ -3,6 +3,7 @@ import { h, clear, card, table, chip, sevChip, srcChip, fmt, ago, toast, guarded
 import { mountAssistant } from "./assistant.js";
 import { put, state } from "./app.js";
 import { can, addNote } from "./actions.js";
+import { addAllergy, addProblem, setProblemStatus, orderLab, orderRadiology, prescribe, admitPatient, moveBed, planDischarge, authorizeDischarge, completeDischarge, bookAppointment } from "./clinical_forms.js";
 
 const drawer = () => document.getElementById("drawer");
 
@@ -25,7 +26,7 @@ function render(dr, id, j) {
   const views = {
     Journey: () => journey(j),
     Vitals: () => vitals(id, s),
-    Clinical: () => clinical(s),
+    Clinical: () => clinical(id, s),
     "Ask CareFlow AI": () => mountAssistant(id, p),
   };
   const perms = state.user;
@@ -42,9 +43,32 @@ function render(dr, id, j) {
     (s.allergies || []).length ? h("p", null, chip("Allergies", "crit"), " ", s.allergies.map((a) => `${a.substance}${a.reaction ? " (" + a.reaction + ")" : ""}`).join("; ")) : h("p", { class: "muted small" }, "No structured allergies recorded."),
     (s.alerts || []).length ? card("Open alerts", h("ul", null, s.alerts.map((a) => h("li", null, sevChip(a.severity), " ", a.title || a.message || "",
       h("button", { class: "btn sm", onclick: () => guarded(async () => { await post(`/api/alerts/${a.id}/acknowledge`); toast("Acknowledged"); openPatient(id); }) }, "Acknowledge"))))) : null,
-    can(perms, "note.write") ? h("div", { class: "row" }, h("button", { class: "btn sm", onclick: () => addNote(id, p.name, perms.role === "nurse" ? ["Nursing"] : ["Progress", "Consult", "Procedure", "Discharge", "Admission"], () => openPatient(id)) }, "Add note")) : null,
+    s.stay ? h("p", { class: "small" }, chip("Admitted", "ok"), ` ${s.stay.ward || ""}${s.stay.bed ? " · bed " + s.stay.bed.code : " · no bed yet"}`, s.stay.discharge_status && s.stay.discharge_status !== "None" ? [" ", chip("Discharge " + s.stay.discharge_status.toLowerCase(), "warn")] : "") : null,
+    actionBar(id, p, s, perms),
     tabsEl, body);
   show("Journey");
+}
+
+// Data entry: every button opens a dialog that calls an existing API route; the server decides what the role may actually do.
+function actionBar(id, p, s, perms) {
+  const reload = () => openPatient(id);
+  const btn = (label, perm, fn) => can(perms, perm) ? h("button", { class: "btn sm", onclick: fn }, label) : null;
+  const stay = s.stay, ds = stay?.discharge_status || "None";
+  const items = [
+    btn("Add note", "note.write", () => addNote(id, p.name, perms.role === "nurse" ? ["Nursing"] : ["Progress", "Consult", "Procedure", "Discharge", "Admission"], reload)),
+    btn("Add allergy", "allergy.write", () => addAllergy(id, p.name, reload)),
+    btn("Add problem", "problem.write", () => addProblem(id, p.name, reload)),
+    btn("Order lab test", "lab.order", () => orderLab(id, p.name, reload)),
+    btn("Order imaging", "rad.order", () => orderRadiology(id, p.name, reload)),
+    btn("Prescribe", "rx.prescribe", () => prescribe(id, p.name, reload)),
+    btn("Book appointment", "appointment.manage", () => bookAppointment({ patient_id: id, patient_name: p.name }, perms, reload)),
+    !stay ? btn("Admit", "admission.manage", () => admitPatient(id, p.name, perms, reload)) : null,
+    stay ? btn(stay.bed ? "Transfer bed" : "Assign bed", "bed.operate", () => moveBed(stay, p.name, reload)) : null,
+    stay && ds !== "Authorized" ? btn("Plan discharge", "admission.manage", () => planDischarge(stay, p.name, reload)) : null,
+    stay && ds !== "Authorized" ? btn("Authorize discharge", "discharge.authorize", () => authorizeDischarge(stay, p.name, reload)) : null,
+    stay && ds === "Authorized" ? btn("Complete discharge", "admission.manage", () => completeDischarge(stay, p.name, reload)) : null,
+  ].filter(Boolean);
+  return items.length ? h("div", { class: "row wrap" }, items) : null;
 }
 
 function journey(j) {
@@ -71,9 +95,11 @@ function vitals(id, s) {
   return wrap;
 }
 
-function clinical(s) {
+function clinical(id, s) {
+  const canEdit = can(state.user, "problem.write");
   return h("div", { class: "grid" },
-    card("Active problems", table([{ label: "Problem", key: "description" }, { label: "Since", key: "onset_on" }, { label: "Status", key: "status" }], s.problems || [], "None recorded.")),
+    card("Active problems", table([{ label: "Problem", key: "description" }, { label: "Since", key: "onset_on" }, { label: "Status", key: "status" },
+      { label: "", render: (r) => canEdit ? h("button", { class: "btn sm", onclick: () => guarded(() => setProblemStatus(r.id, "Resolved", () => openPatient(id))) }, "Mark resolved") : "" }], s.problems || [], "None recorded.")),
     card("Medications", table([{ label: "Medicine", key: "medicine" }, { label: "Dose", key: "dosage" }, { label: "Frequency", key: "frequency" }, { label: "Status", render: (r) => chip(r.status) }], s.medications || [], "None active.")),
     card("Open tasks", table([{ label: "Due", render: (r) => fmt(r.due_at) }, { label: "Task", key: "title" }, { label: "", render: (r) => r.overdue ? chip("overdue", "crit") : "" }], s.tasks || [], "None.")),
     card("Care team", table([{ label: "Name", key: "name" }, { label: "Role", key: "role" }, { label: "Relation", key: "relation" }], s.team || [], "No assignments.")));

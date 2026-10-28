@@ -3,6 +3,8 @@ import { h, card, table, chip, field } from "./ui.js";
 import { openPatientDrawer } from "./app.js";
 import { mountAssistant } from "./assistant.js";
 import { can, registerPatient } from "./actions.js";
+import { bookAppointment, appointmentAction } from "./clinical_forms.js";
+import { guarded } from "./ui.js";
 import { state } from "./app.js";
 
 export async function renderPatients(setMain) {
@@ -24,10 +26,20 @@ export async function renderPatients(setMain) {
 
 export async function renderAppointments(setMain) {
   const d = await get("/api/appointments");
-  setMain(h("div", { class: "grid" }, h("h2", null, "Appointments"), card("Schedule", table([
+  const u = state.user, reload = () => renderAppointments(setMain);
+  const act = (a) => {
+    const active = ["Scheduled", "Checked-in"].includes(a.status);
+    const mine = u.doctor_id && a.doctor_id === u.doctor_id;
+    return h("div", { class: "row" },
+      active && mine && can(u, "encounter.manage") ? h("button", { class: "btn sm", onclick: () => guarded(() => appointmentAction(a.id, "start", reload)) }, a.status === "Checked-in" ? "Continue" : "Start") : null,
+      active && mine && can(u, "encounter.manage") && a.status === "Checked-in" ? h("button", { class: "btn sm", onclick: () => guarded(() => appointmentAction(a.id, "complete", reload)) }, "Complete") : null,
+      active && can(u, "appointment.manage") ? h("button", { class: "btn sm", onclick: () => guarded(() => appointmentAction(a.id, "cancel", reload)) }, "Cancel") : null);
+  };
+  setMain(h("div", { class: "grid" }, h("div", { class: "row between" }, h("h2", null, "Appointments"),
+    can(u, "appointment.manage") ? h("button", { class: "btn primary", onclick: () => bookAppointment(null, u, reload) }, "+ Book appointment") : null), card("Schedule", table([
     { label: "Date", key: "date" }, { label: "Time", key: "time" },
     { label: "Patient", render: (a) => a.patient_id ? h("button", { class: "btn sm ghost", onclick: () => openPatientDrawer(a.patient_id) }, a.patient_name) : h("span", { class: "muted" }, "Restricted") },
-    { label: "Doctor", render: (a) => a.doctor_name || "—" }, { label: "Status", render: (a) => chip(a.status) },
+    { label: "Doctor", render: (a) => a.doctor_name || "—" }, { label: "Status", render: (a) => chip(a.status) }, { label: "", render: act },
   ], d.items, "No appointments."))));
 }
 

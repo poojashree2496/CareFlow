@@ -30,6 +30,8 @@ def ask(api, cid, q, **kw):
 
 
 def prompt_text():
+    if not MockProvider.calls:   # no relevant evidence found: the model is not called at all
+        return ""
     return "\n".join(m["content"] for m in MockProvider.calls[-1]["messages"])
 
 
@@ -282,3 +284,38 @@ def test_retention_purge(app, as_user, ids):
     db.session.commit()
     assert d1.post("/api/ai/purge").status_code == 403      # only configuration managers
     assert as_user("super").post("/api/ai/purge").json["removed"] == 1
+
+
+# ------------------------------------------------------------------ narrow answers: only what was asked
+@pytest.mark.parametrize("question,must,must_not", [
+    ("How old is the patient?", ["Age:"], ["Sex:", "Blood group:", "Penicillin", "Problem list", "Recent vital", "Medication", "Latest admission"]),
+    ("What is the age?", ["Age:"], ["Sex:", "Blood group:", "Penicillin", "Problem list", "Recent vital", "Medication", "Latest admission"]),
+    ("What is the blood group?", ["Blood group:"], ["Age:", "Sex:", "Penicillin", "Problem list", "Recent vital", "Medication", "Latest admission"]),
+    ("What is the gender?", ["Sex:"], ["Age:", "Blood group:", "Penicillin", "Problem list", "Recent vital", "Medication", "Latest admission"]),
+])
+def test_a_small_question_retrieves_only_that_fact(as_user, ids, mock_ai, question, must, must_not):
+    d1 = as_user("doctor1")
+    MockProvider.responder = lambda s, m, i: "Noted [E1]."
+    out = ask(d1, convo(d1, ids.patient["Maya Rao"]), question)
+    prompt = prompt_text()
+    evidence = prompt.split("<evidence>")[1].split("</evidence>")[0]
+    for x in must:
+        assert x in evidence
+    for x in must_not:
+        assert x not in evidence, f"{x!r} should not be retrieved for {question!r}"
+    assert len(out["message"]["sources"]) == 1
+
+
+def test_unconfigured_age_question_shows_only_the_age(as_user, ids):
+    d1 = as_user("doctor1")
+    out = ask(d1, convo(d1, ids.patient["Maya Rao"]), "How old is the patient?")
+    content = out["message"]["content"]
+    assert "Age:" in content and "Penicillin" not in content and "Blood group" not in content
+
+
+def test_medication_question_still_brings_allergies_for_safety(as_user, ids, mock_ai):
+    d1 = as_user("doctor1")
+    MockProvider.responder = lambda s, m, i: "Noted [E1]."
+    ask(d1, convo(d1, ids.patient["Maya Rao"]), "What medications is the patient on?")
+    evidence = prompt_text().split("<evidence>")[1].split("</evidence>")[0]
+    assert "Active allergies" in evidence

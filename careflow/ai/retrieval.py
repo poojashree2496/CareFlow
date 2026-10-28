@@ -23,6 +23,7 @@ from ..utils import age_from_dob, iso
 from .safety import sanitize_untrusted
 
 KIND_WORDS = {
+    "demographics": r"\bage\b|\bold\b|\bdob\b|birth|\bborn\b|gender|\bsex\b|\bmale\b|\bfemale\b|blood (group|type)",
     "lab": r"\blab|blood test|result|haemoglobin|hemoglobin|creatinine|glucose|hba1c|sodium|potassium|wbc|platelet|cholesterol|test",
     "radiology": r"radiolog|x-?ray|\bct\b|\bmri\b|ultrasound|scan|imaging|echo",
     "medication": r"medic|drug|prescri|tablet|dose|\brx\b|dispens|administ|insulin|antibiotic",
@@ -116,8 +117,21 @@ class Builder:
     def demographics(self):
         if not self.allowed("demographics"):
             return
+        q = self.q or ""
+        want_age = re.search(r"\bage\b|\bold\b|\bdob\b|birth|\bborn\b", q, re.I)
+        want_sex = re.search(r"gender|\bsex\b|\bmale\b|\bfemale\b", q, re.I)
+        want_bg = re.search(r"blood (group|type)", q, re.I)
+        if not (want_age or want_sex or want_bg):   # no specific field named: give all three (non-identifying) fields
+            want_age = want_sex = want_bg = True
         age = age_from_dob(self.p.dob)
-        self.add("demographics", "Patient demographics", f"Age: {age if age is not None else 'not recorded'}; sex: {self.p.gender or 'not recorded'}; blood group: {self.p.blood_group or 'not recorded'}.", {"type": "patient", "id": self.p.id})
+        parts = []
+        if want_age:
+            parts.append(f"Age: {age if age is not None else 'not recorded'}")
+        if want_sex:
+            parts.append(f"Sex: {self.p.gender or 'not recorded'}")
+        if want_bg:
+            parts.append(f"Blood group: {self.p.blood_group or 'not recorded'}")
+        self.add("demographics", "Patient demographics", "; ".join(parts) + ".", {"type": "patient", "id": self.p.id})
 
     def allergy(self):
         if not self.allowed("allergy"):
@@ -303,7 +317,10 @@ class Builder:
 def gather(user, patient: Patient, scopes: frozenset, question: str, *, max_chars: int, doc_ids=None):
     b = Builder(user, patient, scopes, question, max_chars)
     kinds = classify(question)
-    order = list(dict.fromkeys(["demographics", "allergy"] + (kinds or list(BROAD))))
+    base = list(kinds) if kinds else list(BROAD)
+    if "medication" in base and "allergy" not in base:   # allergies are relevant to any medication question
+        base.append("allergy")
+    order = list(dict.fromkeys(base))
     if doc_ids and "document" not in order:
         order.append("document")
     for k in order:
